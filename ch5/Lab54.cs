@@ -2,6 +2,7 @@ using System.ComponentModel;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using YourNamespace.Filters;
 
 // 具短期記憶對話與自動 function calling(Native function) 的聊天範例
 public static class Lab54
@@ -19,31 +20,37 @@ public static class Lab54
         kernel.Plugins.AddFromType<WeatherService>();
 
 
-        var writerPrompt = @"採用村上春樹風格，為主題 ```{{$theme}}``` 創作一篇短文";
+        var writerPrompt = @"採用村上春樹風格，為主題 ```{{$title}}``` 創作一篇短文，全長約 500 字。
+        請使用村上春樹的獨特風格，包含隱喻、象徵和富有詩意的語言。
+        請注意，這篇短文應該是完整的敘事，並且能夠引起讀者的共鳴。";
+
         var writerFunction = kernel.CreateFunctionFromPrompt(writerPrompt, new OpenAIPromptExecutionSettings
         {
-            TopP = 0.7f,
-            MaxTokens = 1000,
+            Temperature = 0.7f,
+            MaxTokens = 2000,
         },
          functionName: "WriteMurakamiStyleEssay",
-         description: "使用村上春樹風格創作短文"
+         description: "Write a short essay , with a title provided by the user."
         );
 
         // 將 writerFunction 註冊到 kernel
         kernel.Plugins.AddFromFunctions("Writer", [writerFunction]);
 
-        foreach (var plugin in kernel.Plugins)
-        {
-            Console.WriteLine($"Plugin Name: {plugin.Name}");
-            Console.WriteLine($"Plugin Description: {plugin.Description}");
-            foreach (var function in plugin.GetFunctionsMetadata())
-            {
-                // 列出所有註冊的 function
-                Console.WriteLine($"Function Name: {function.Name}");
-                Console.WriteLine($"Function Description: {function.Description}");
-            }
+        kernel.AutoFunctionInvocationFilters.Add(new AuditFilter());
 
-        }
+
+        // 這裡可以列出所有註冊的 plugin 和 function
+        // foreach (var plugin in kernel.Plugins)
+        // {
+        //     Console.WriteLine($"Plugin Name: {plugin.Name}");
+        //     Console.WriteLine($"Plugin Description: {plugin.Description}");
+        //     foreach (var function in plugin.GetFunctionsMetadata())
+        //     {
+        //         // 列出所有註冊的 function
+        //         Console.WriteLine($"Function Name: {function.Name}");
+        //         Console.WriteLine($"Function Description: {function.Description}");
+        //     }
+        // }
 
         // 建立對話歷史
         ChatHistory history = [];
@@ -98,3 +105,6 @@ public static class Lab54
         Console.WriteLine("Bye!");
     }
 }
+
+
+

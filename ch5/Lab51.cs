@@ -6,7 +6,7 @@ public static class Lab51
     // 不具短期記憶對話功能
     public static async Task Execution()
     {
-        Kernel kernel = Kernel.CreateBuilder()
+        Kernel kernel = Kernel.CreateBuilder()     
                         .AddOpenAIChatCompletion(
                             apiKey: Config.OpenAI_ApiKey,
                             modelId: Config.ModelId)
