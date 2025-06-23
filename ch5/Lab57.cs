@@ -26,7 +26,9 @@ public static class Lab57
         // 根據 ID 取得已存在的 Azure AI Agent
         PersistentAgent definition = await client.Administration.GetAgentAsync("asst_nplGgHzAc1Z3sam0n9kps6u7");
         AzureAIAgent agent = new(definition, client);
-        // Azure foundry 中的 Agent 並不會host Plugin，所以需要每次啟動時重新附掛 Plugin。
+
+        // 自訂義的 Plugin（也就是不是 AI Agent Service 本身預設提供的那些），那這些 Plugin 並不會被 Agent 持久化
+        // ，所以需要每次啟動時重新附掛 Plugin。
         agent.Kernel.Plugins.Add(plugin);
         AzureAIAgentThread agentThread = new(agent.Client);
 

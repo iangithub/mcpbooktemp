@@ -48,6 +48,8 @@ public static class Lab55
                 if (string.IsNullOrEmpty(response.Content))
                 {
                     StreamingFunctionCallUpdateContent? functionCall = response.Items.OfType<StreamingFunctionCallUpdateContent>().SingleOrDefault();
+
+                    //追蹤函數調用
                     if (!string.IsNullOrEmpty(functionCall?.Name))
                     {
                         Console.WriteLine($"\n# trace {response.Role} - {response.AuthorName ?? "*"}: FUNCTION CALL - {functionCall.Name}");

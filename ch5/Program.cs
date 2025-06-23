@@ -6,8 +6,8 @@
 //await Lab54.Execution(); //加上語意function
 //await Lab55.Execution(); //ChatCompletionAgent
 //await Lab56.Execution(); //OpenAI Assistant Agent
-//await Lab57.Execution(); //Azure AI Agent
-await Lab58.Execution(); //Azure AI Agent
+await Lab57.Execution(); //Azure AI Agent
+//await Lab58.Execution(); //Azure AI Agent
 
 
 

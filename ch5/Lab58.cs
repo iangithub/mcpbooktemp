@@ -81,30 +81,30 @@ public class Lab58
         };
 
 
-        //選擇合適的聊天代理人 (用HandoffOrchestration)
-        // Define the orchestration
-        HandoffOrchestration orchestration =
-            new(OrchestrationHandoffs
-                    .StartWith(triageAgent)
-                    .Add(triageAgent, statusAgent, returnAgent, refundAgent)
-                    .Add(statusAgent, triageAgent, "Transfer to this agent if the issue is not status related")
-                    .Add(returnAgent, triageAgent, "Transfer to this agent if the issue is not return related")
-                    .Add(refundAgent, triageAgent, "Transfer to this agent if the issue is not refund related"),
-                triageAgent,
-                statusAgent,
-                returnAgent,
-                refundAgent)
-            {
-                InteractiveCallback = () =>
-                {
-                    string input = responses.Dequeue();
-                    Console.WriteLine($"\n# INPUT: {input}\n");
-                    return ValueTask.FromResult(new ChatMessageContent(AuthorRole.User, input));
-                },
-                LoggerFactory = this.LoggerFactory,
-                ResponseCallback = monitor.ResponseCallback,
-                StreamingResponseCallback = streamedResponse ? monitor.StreamingResultCallback : null,
-            };
+        // //選擇合適的聊天代理人 (用HandoffOrchestration)
+        // // Define the orchestration
+        // HandoffOrchestration orchestration =
+        //     new(OrchestrationHandoffs
+        //             .StartWith(triageAgent)
+        //             .Add(triageAgent, statusAgent, returnAgent, refundAgent)
+        //             .Add(statusAgent, triageAgent, "Transfer to this agent if the issue is not status related")
+        //             .Add(returnAgent, triageAgent, "Transfer to this agent if the issue is not return related")
+        //             .Add(refundAgent, triageAgent, "Transfer to this agent if the issue is not refund related"),
+        //         triageAgent,
+        //         statusAgent,
+        //         returnAgent,
+        //         refundAgent)
+        //     {
+        //         InteractiveCallback = () =>
+        //         {
+        //             string input = responses.Dequeue();
+        //             Console.WriteLine($"\n# INPUT: {input}\n");
+        //             return ValueTask.FromResult(new ChatMessageContent(AuthorRole.User, input));
+        //         },
+        //         LoggerFactory = this.LoggerFactory,
+        //         ResponseCallback = monitor.ResponseCallback,
+        //         StreamingResponseCallback = streamedResponse ? monitor.StreamingResultCallback : null,
+        //     };
 
 
 
@@ -124,10 +124,10 @@ public class Lab58
 
 
         // 啟動協作流程
-        InProcessRuntime runtime = new();
-        await runtime.StartAsync();
-        var result = await groupChatOrchestration.InvokeAsync("上下班時間的規定是什麼？", runtime); // 使用者輸入問題
-        Console.WriteLine(await result.GetValueAsync()); // 輸出最終結果
+        // InProcessRuntime runtime = new();
+        // await runtime.StartAsync();
+        // var result = await groupChatOrchestration.InvokeAsync("上下班時間的規定是什麼？", runtime); // 使用者輸入問題
+        // Console.WriteLine(await result.GetValueAsync()); // 輸出最終結果
 
 
 
