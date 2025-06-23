@@ -36,10 +36,11 @@ public static class Lab54
         // 將 writerFunction 註冊到 kernel
         kernel.Plugins.AddFromFunctions("Writer", [writerFunction]);
 
+        // 註冊過濾器，自定義的 function invocation filter
         kernel.AutoFunctionInvocationFilters.Add(new AuditFilter());
 
 
-        // 這裡可以列出所有註冊的 plugin 和 function
+        // 列出kernel物件中所有註冊的 plugin 和 function
         // foreach (var plugin in kernel.Plugins)
         // {
         //     Console.WriteLine($"Plugin Name: {plugin.Name}");
