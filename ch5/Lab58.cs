@@ -23,16 +23,17 @@ public class Lab58
 
         // 註冊多個plugins
         kernel.Plugins.AddFromType<HRPolicyService>();
-        kernel.Plugins.AddFromType<ITSupportPlugin>();
-        kernel.Plugins.AddFromType<CompliancePlugin>();
+        kernel.Plugins.AddFromType<ITSupportService>();
+        kernel.Plugins.AddFromType<ComplianceService>();
 
         // 建立多個聊天代理人
         var triageAgent = new ChatCompletionAgent
         {
             Kernel = kernel,
             Name = "TriageAgent",
-            Description = "處理員工請求。",
-            Instructions = "對問題進行分類的企業支援代理。"
+            Description = "問題分流助理",
+            Instructions = @"對使用者的提問進行分類的企業支援代理。任務是判斷使用者問題屬於哪一類：人資(HR)、IT、或合規(Compliance)。
+            若不屬於任何類型，也可請使用者釐清問題類別。"
         };
 
         var hrAgent = new ChatCompletionAgent
@@ -81,55 +82,41 @@ public class Lab58
         };
 
 
-        // //選擇合適的聊天代理人 (用HandoffOrchestration)
-        // // Define the orchestration
-        // HandoffOrchestration orchestration =
-        //     new(OrchestrationHandoffs
-        //             .StartWith(triageAgent)
-        //             .Add(triageAgent, statusAgent, returnAgent, refundAgent)
-        //             .Add(statusAgent, triageAgent, "Transfer to this agent if the issue is not status related")
-        //             .Add(returnAgent, triageAgent, "Transfer to this agent if the issue is not return related")
-        //             .Add(refundAgent, triageAgent, "Transfer to this agent if the issue is not refund related"),
-        //         triageAgent,
-        //         statusAgent,
-        //         returnAgent,
-        //         refundAgent)
-        //     {
-        //         InteractiveCallback = () =>
-        //         {
-        //             string input = responses.Dequeue();
-        //             Console.WriteLine($"\n# INPUT: {input}\n");
-        //             return ValueTask.FromResult(new ChatMessageContent(AuthorRole.User, input));
-        //         },
-        //         LoggerFactory = this.LoggerFactory,
-        //         ResponseCallback = monitor.ResponseCallback,
-        //         StreamingResponseCallback = streamedResponse ? monitor.StreamingResultCallback : null,
-        //     };
+
+        //選擇合適的聊天代理人 (用 HandoffOrchestration)
+        // Define the orchestration
+        HandoffOrchestration orchestration =
+            new(OrchestrationHandoffs
+                    .StartWith(triageAgent)
+                    .Add(triageAgent, hrAgent, itAgent, complianceAgent)
+                    .Add(triageAgent, hrAgent, "Transfer to this agent if the issue is about leave, salary, HR policy, or attendance.")
+                    .Add(triageAgent, itAgent, "Transfer to this agent if the issue is about IT, account, VPN, password, or device.")
+                    .Add(triageAgent, complianceAgent, "Transfer to this agent if the issue is about compliance, security, or internal company policy."),
+                triageAgent, hrAgent, itAgent, complianceAgent);
 
 
+        // 建立協作流程物件
+        InProcessRuntime runtime = new();
 
+        // 使用 Azure AI Agent 進行對話
+        Console.Write("User > ");
+        string? userInput;
+        while ((userInput = Console.ReadLine()) is not null)
+        {
+            //啟動協作流程
+            await runtime.StartAsync();
+            if (string.IsNullOrWhiteSpace(userInput) || userInput.Equals("exit", StringComparison.OrdinalIgnoreCase))
+                break;
 
-        // // 建立群組聊天協作流程
-        // // 使用輪詢策略，最多3輪
-        // GroupChatOrchestration groupChatOrchestration = new(
-        //            new RoundRobinGroupChatManager() { MaximumInvocationCount = 3 }, // 輪詢策略，最多3輪
-        //           hrAgent, itAgent, complianceAgent) // 註冊代理
-        // {
-        //     ResponseCallback = message => // 即時顯示對話過程
-        //     {
-        //         Console.WriteLine($"{message.AuthorName}: {message.Content}");
-        //         return ValueTask.CompletedTask;
-        //     }
-        // };
+            // 將使用者輸入傳遞給協作流程
+            var result = await orchestration.InvokeAsync(userInput, runtime);
+            Console.Write("AI > ");
+            var response = result.GetValueAsync(TimeSpan.FromSeconds(300));
+            Console.Write(response);
+            await runtime.RunUntilIdleAsync();
 
-
-        // 啟動協作流程
-        // InProcessRuntime runtime = new();
-        // await runtime.StartAsync();
-        // var result = await groupChatOrchestration.InvokeAsync("上下班時間的規定是什麼？", runtime); // 使用者輸入問題
-        // Console.WriteLine(await result.GetValueAsync()); // 輸出最終結果
-
-
-
+            Console.WriteLine("\n\n");
+            Console.Write("User > ");
+        }
     }
 }

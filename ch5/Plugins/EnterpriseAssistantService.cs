@@ -7,25 +7,19 @@ public class HRPolicyService
     [KernelFunction, Description("Get detailed leave policy information")]
     public string GetLeavePolicy([Description("Type of leave")] string leaveType)
     {
-        return leaveType.ToLower() switch
-        {
-            "病假" => "病假每年提供30日，未使用部分得轉為特休。",
-            "特休" => "特休依年資計算，滿一年提供7日，滿兩年提供10日。",
-            "事假" => "事假每年最多7日，不扣薪但需主管核准。",
-            _ => "查無該類型的請假規定，請確認輸入是否正確。"
-        };
+        return @"請假政策說明：\n" +
+               "1. 病假：每年提供30日，未使用部分得轉為特休。\n" +
+               "2. 特休：依年資計算，滿一年提供7日，滿兩年提供10日。\n" +
+               "3. 事假：每年最多7日，不扣薪但需主管核准。";
     }
 
     [KernelFunction, Description("Query specific benefit policy")]
     public string GetBenefitPolicy([Description("Benefit name")] string benefitName)
     {
-        return benefitName.ToLower() switch
-        {
-            "旅遊補助" => "每位員工每年可申請一次旅遊補助上限 NT$5,000。",
-            "健康檢查" => "公司每兩年提供一次免費員工健康檢查。",
-            "午餐補助" => "每日午餐補助 NT$100，自動匯入薪資帳戶。",
-            _ => "無法找到指定的福利項目。"
-        };
+        return @"福利政策說明：\n" +
+               "1. 旅遊補助：每位員工每年可申請一次旅遊補助上限 NT$5,000。\n" +
+               "2. 健康檢查：公司每兩年提供一次免費員工健康檢查。\n" +
+               "3. 午餐補助：每日午餐補助 NT$100，自動匯入薪資帳戶。";
     }
 
     [KernelFunction, Description("Query attendance policy description")]
@@ -36,7 +30,7 @@ public class HRPolicyService
 }
 
 //實際情況下，這裡可能會查詢資料庫或調用外部API來獲取內容
-public class ITSupportPlugin
+public class ITSupportService
 {
     [KernelFunction, Description("Get VPN setup tutorial")]
     public string GetVpnSetup()
@@ -59,7 +53,7 @@ public class ITSupportPlugin
 
 
 //實際情況下，這裡可能會查詢資料庫或調用外部API來獲取內容
-public class CompliancePlugin
+public class ComplianceService
 {
     [KernelFunction, Description("Query specific contract compliance clause")]
     public string GetContractPolicy([Description("Clause name")] string clauseName)
