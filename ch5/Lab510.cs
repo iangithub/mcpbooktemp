@@ -104,7 +104,7 @@ public class Lab510
 
         // 6. 顯示所有 Agent 回覆
         var finalReport = await result.GetValueAsync(TimeSpan.FromSeconds(300));
-        Console.WriteLine($"\n# RESULT: {finalReport}");
+        Console.WriteLine(finalReport);
 
         await runtime.RunUntilIdleAsync();
     }

@@ -9,7 +9,8 @@
 //await Lab57.Execution(); //Azure AI Agent
 //await Lab58.Execution(); //HandoffOrchestration Agent
 //await Lab59.Execution(); //SequentialOrchestration AI Agent
-await Lab510.Execute(); //GroupChatOrchestration AI Agent
+//await Lab510.Execute(); //GroupChatOrchestration AI Agent
+await Lab511.Execute(); //ConcurrentOrchestration AI Agent
 
 
 
