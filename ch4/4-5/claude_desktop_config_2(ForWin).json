@@ -1,0 +1,22 @@
+{
+    "mcpServers": {
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "C:\\Users\\username\\Desktop",
+                "C:\\Users\\username\\Downloads"
+            ]
+        },
+        "weather": {
+            "command": "C:\\YourPathTo\\uv",
+            "args": [
+                "--directory",
+                "C:\\YourPathTo\\weather",
+                "run",
+                "weather.py"
+            ]
+        }
+    }
+}

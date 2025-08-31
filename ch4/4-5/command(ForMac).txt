@@ -1,0 +1,10 @@
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 建立新資料夾並進入
+uv init weather
+cd weather
+# 建立虛擬環境並啟動
+uv venv
+source .venv/bin/activate
+# 安裝套件
+uv add "mcp[cli]" httpx

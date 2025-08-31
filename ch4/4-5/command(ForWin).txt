@@ -1,0 +1,10 @@
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# 建立新資料夾並進入
+uv init weather
+cd weather
+# 建立虛擬環境並啟動
+uv venv
+.venv\Scripts\activate
+# 安裝套件
+uv add mcp[cli] httpx
