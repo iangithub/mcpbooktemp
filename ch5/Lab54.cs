@@ -15,6 +15,13 @@ public static class Lab54
                             modelId: Config.ModelId)
                         .Build();
 
+        // 本機ollama+gpt-oss:20b
+        // Kernel kernel = Kernel.CreateBuilder()
+        //     .AddOllamaChatCompletion(
+        //         endpoint: new Uri(Config.Ollama_Endpoint),
+        //         modelId: Config.Ollama_ModelId)
+        //     .Build();
+
         // 註冊 WeatherService 作為Plugin (native function)
         // WeatherService 是一個自定義的服務，提供天氣相關的功能
         kernel.Plugins.AddFromType<WeatherService>();

@@ -21,6 +21,13 @@ public class Lab58
                                     modelId: Config.ModelId)
                                 .Build();
 
+        // 本機ollama+gpt-oss:20b
+        // Kernel kernel = Kernel.CreateBuilder()
+        //     .AddOllamaChatCompletion(
+        //         endpoint: new Uri(Config.Ollama_Endpoint),
+        //         modelId: Config.Ollama_ModelId)
+        //     .Build();
+
         // 註冊多個plugins
         kernel.Plugins.AddFromType<HRPolicyService>();
         kernel.Plugins.AddFromType<ITSupportService>();

@@ -20,6 +20,12 @@ public class Lab59
                                     modelId: Config.ModelId)
                                 .Build();
 
+        // 本機ollama+gpt-oss:20b
+        // Kernel kernel = Kernel.CreateBuilder()
+        //     .AddOllamaChatCompletion(
+        //         endpoint: new Uri(Config.Ollama_Endpoint),
+        //         modelId: Config.Ollama_ModelId)
+        //     .Build();
 
         var hrAgent = new ChatCompletionAgent()
         {
@@ -136,7 +142,7 @@ public class Lab59
         // 執行 Sequential Orchestration
         var result = await orchestration.InvokeAsync(input, runtime);
 
-        string finalReport = await result.GetValueAsync(TimeSpan.FromSeconds(300));
+        string finalReport = await result.GetValueAsync(TimeSpan.FromSeconds(3000));
         Console.WriteLine("\n審查完成：");
         Console.WriteLine(finalReport);
 
