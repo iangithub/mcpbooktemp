@@ -5,7 +5,7 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from google import genai
 
-client = genai.Client(api_key="AIzaSyAXsV3459s6MJWPQiSqCIq2Z4S_KCpiZzc")
+client = genai.Client(api_key="xxx")
 
 # Create server parameters for stdio connection
 server_params = StdioServerParameters(
