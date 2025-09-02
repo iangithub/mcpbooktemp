@@ -1,0 +1,12 @@
+[project]
+name = "3-4"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "litellm[proxy]>=1.75.2",
+    "openai==1.99.1",
+    "openai-agents[litellm,viz]==0.2.5",
+    "update>=0.0.1",
+]
